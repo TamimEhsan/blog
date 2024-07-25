@@ -2,7 +2,7 @@ How we stay connected in the recent internet shutdown with some networking knowl
 
 ### The Problem
 
-We can't connect to anything using internet. We need someway of communication to know if others are doing okay. Also, new episode of HOTD is out, we need some way to access it and if possible some other too. 
+We can't connect to anything using internet. We need someway of communication to know if others are doing okay. Also, we need someway to share videos, we need some way to access them and if possible some other too. 
 
 ### Basics of Network Routing 
 
@@ -52,7 +52,7 @@ The chat server will expose 3 api.
 2. GET api/:room/:timestamp => returns all the message of a room after the given timestamp
 3. POST api/:room => sends a message to a room
 
-The ftp server exposes a directory from which users can download contents. 
+The file server exposes a directory from which users can download contents. 
 
 The file uploader service will listen to any upload request and save the files in the directory exposed by the ftp server. 
 
@@ -66,11 +66,8 @@ In the server, the messages are stored in memory. Occasionally when memory usage
 
 When a user sends a request, a entry is added against him with the access time. This is used to calculate the number of active users in a room. A user will be inactive after 1 minute.
 
-### The FTP service
 
-The ftp server is a simple file server based on python. You can find how to create a simple ftp server just by one single command in google. 
-
-### The Uploader Service
+### The File Uploader Service
 
 Luckily we made this file uploader server client in our networking lab as a weekly assignment. So, let's reuse that.
 
@@ -79,6 +76,10 @@ We used a java based socket io app for file upload. A server listens to a port f
 The uploader server is off by default. If anyone wants to upload something, they contacts the owner and he turns it on.
 
 We can use this uploader service to upload new versions of the system. 3 versions was deployed in total. 
+
+### The File Server Service
+
+The file server service is a simple file server based on Java. The file server uses http protocol to serve the files. This was also a part of our java weekly assignment. 
 
 ### Some calculations
 
@@ -92,9 +93,9 @@ If you have some knowledge about nodejs server you will know that a nodejs serve
 
 For the ftp uploader, as the access is limited we do not need to worry about it too much. 
 
-On average about 30% of the users stream from the ftp client. The average size of an episode is 500MB and each episode is about 30 minute long. So, 100\*0.3\*500/(30*60) = 8 MBps upload. Interestingly, that is the actual speed that recorded from the server! And luckily our average internet connection gives us upload speed (from the servers perspective) of about that much. 
+On average about 30% of the users stream from the content client. The average size of a video is 500MB and is about 30 minute long. So, 100\*0.3\*500/(30*60) = 8 MBps upload. Interestingly, that is the actual speed that recorded from the server! And luckily our average internet connection gives us upload speed (from the servers perspective) of about that much. 
 
-There are 5 seasons of different shows. Each season has about 10 episodes on average. So, 25 GB of storage for the ftp server.
+There are 5 groups of different videos. Each group has about 10 videos on average. So, 25 GB of storage for the file storage.
 
 So, you can see how our peculiar design choice is justifiable based on the load. If we aimed for higher load we could use better alternatives like using web hooks instea of pooling, using a nosql db for storing the messages instead of plain text etc.
 
@@ -102,7 +103,7 @@ So, you can see how our peculiar design choice is justifiable based on the load.
 
 ![alt text](assets/ui.png)
 
-A huge thanks to Mobasshir and Sabit for doing the heavy lifting. We are grateful to you guys. Again a soft reminder, things could have been done a different way, but we had no choice. The codes will be uploaded to github (or not, it's nothing extraordinary). We were not prepared for this kind of situation but we will be from now. You should have some backups yourself too.
+A huge thanks to Mobashwir and Sabit for doing the heavy lifting. We are grateful to you guys. Again a soft reminder, things could have been done a different way, but we had no choice. The codes will be uploaded to github (or not, it's nothing extraordinary). We were not prepared for this kind of situation but we will be from now. You should have some backups yourself too.
 
 Thank you for reading this much random things. Till next time!
 
