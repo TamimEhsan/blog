@@ -56,6 +56,8 @@ The file server exposes a directory from which users can download contents.
 
 The file uploader service will listen to any upload request and save the files in the directory exposed by the ftp server. 
 
+PS. We do not allow encryption or any kind of authorization to keep it simple and transparent. It is used for emmergency communication, not for secret conversation. 
+
 ### The Chat Service
 
 The service is written in simple nodejs and expressjs. 
@@ -85,15 +87,15 @@ The file server service is a simple file server based on Java. The file server u
 
 The system was designed to be used within our friends. So the user count is very small. 
 
-The number of user is about 100. About 80% of them are active at peak. Each user on average sends 10 messages in a minute on average. So there will be about 100\*0.8\*10/60 = 14 post request per second. A user pools at every 5 second. An average user has 2 tabs open. So, there will be 100\*0.8\*2\*(60/5)/60 = 32 get requests per second. So a total of about 46 requests per second.
+The number of user is about 1000. About 80% of them are active at peak. Each user on average sends 10 messages in a minute on average. So there will be about 1000\*0.8\*10/60 = 140 post request per second. A user pools at every 5 second. An average user has 2 tabs open. So, there will be 1000\*0.8\*2\*(60/5)/60 = 320 get requests per second. So a total of about 460 requests per second.
 
-The average size of a message is about 100 byte. A user sends about 100 message a day. So, for 7 days the total size of stored messages would be 7\*100\*100\*100 byte [7 days, 100 users, 100 message, 100 byte] = 7 MB! Not that much! 
+The average size of a message is about 100 byte. A user sends about 100 message a day. So, for 7 days the total size of stored messages would be 7\*1000\*100\*100 byte [7 days, 1000 users, 100 message, 100 byte] = 70 MB! Not that much! 
 
 If you have some knowledge about nodejs server you will know that a nodejs server can easily handle 2000 requests per second. So, in practice we could handle about 2000 users easily without any issue. 
 
-For the ftp uploader, as the access is limited we do not need to worry about it too much. 
+For the file uploader, as the access is limited we do not need to worry about it too much. 
 
-On average about 30% of the users stream from the content client. The average size of a video is 500MB and is about 30 minute long. So, 100\*0.3\*500/(30*60) = 8 MBps upload. Interestingly, that is the actual speed that recorded from the server! And luckily our average internet connection gives us upload speed (from the servers perspective) of about that much. 
+On average about 20% of the users stream from the content client. The average size of a video is 500MB and is about 30 minute long. So, 1000\*0.2\*500/(30*60) = 55 MBps upload. And luckily our average internet connection gives us upload speed (from the servers perspective) of about that much (not always though). 
 
 There are 5 groups of different videos. Each group has about 10 videos on average. So, 25 GB of storage for the file storage.
 
